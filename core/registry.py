@@ -4,6 +4,17 @@ from resources.settings import Settings
 
 # Read the status of the GSync
 def read_status():
+    try:
+        key = reg.OpenKey(reg.HKEY_CURRENT_USER, Settings.REGISTRY_PATH, 0, reg.KEY_READ)
+    except FileNotFoundError:
+        # If the key does not exist, return a default status
+        return "OFF"
+    except PermissionError:
+        print("PermissionError: Access is denied. Please run the application as an administrator.")
+        return "OFF"
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return "OFF"
     key = reg.OpenKey(reg.HKEY_CURRENT_USER, Settings.REGISTRY_PATH, 0, reg.KEY_READ)
     status = reg.QueryValueEx(key, "GSyncStatus")[0]
     reg.CloseKey(key)

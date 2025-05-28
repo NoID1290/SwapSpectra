@@ -204,6 +204,21 @@ namespace ClearNVGX
 // This code provides a class ClearNvngx that can be used to clear the NVIDIA NGX models directory.
 // It includes a method to delete the directory and handle any exceptions that may occur during the process.
 
+namespace readGsyncStatus
+    {
+    [ComVisible(true)]
+    [Guid("A1B2C3D4-E5F6-7890-1234-56789ABCDEF1")] // Generate a new GUID
+    public class ReadGsyncStatus
+    {
+        public static string GetGsyncStatus()
+        {
+            // Placeholder for actual G-Sync status retrieval logic
+            return "G-Sync is enabled.";
+        }
+    }
+}
+
+
 namespace ReturnPresence
 {
     [ComVisible(true)]
