@@ -1,0 +1,34 @@
+# UTF-8
+#
+VSVersionInfo(
+    ffi=FixedFileInfo(
+        filevers=(1, 1, 13, 250116),
+        prodvers=(1, 1, 13, 250116),
+        mask=0x3f,
+        flags=0x0,
+        OS=0x4,
+        fileType=0x1,
+        subtype=0x0,
+        date=(0, 0)
+    ),
+    kids=[
+        StringFileInfo(
+            [
+                StringTable(
+                    u'040904B0',
+                    [
+                        StringStruct(u'CompanyName', u'NoID Softwork'),
+                        StringStruct(u'FileDescription', u'G-Sync Toggle Tool'),
+                        StringStruct(u'FileVersion', u'1.1.13.250116'),
+                        StringStruct(u'InternalName', u'GvSync'),
+                        StringStruct(u'LegalCopyright', u'(c) 2024 NoID Softwork'),
+                        StringStruct(u'OriginalFilename', u'GvSync.exe'),
+                        StringStruct(u'ProductName', u'GvSync'),
+                        StringStruct(u'ProductVersion', u'1.1.13.250116')
+                    ]
+                )
+            ]
+        ),
+        VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
+    ]
+)
