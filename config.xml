@@ -1,0 +1,6 @@
+<config>
+    <runAsAdmin>false</runAsAdmin>
+    <closeOnTray>false</closeOnTray>
+    <minimizeAtLaunch>false</minimizeAtLaunch>
+    
+</config>

@@ -1,0 +1,9 @@
+dist/
+build/
+.vs
+.vscode
+.TEST
+_todo/
+__pycache__
+
+gsyncwrapper.log

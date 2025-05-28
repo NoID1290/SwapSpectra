@@ -1,0 +1,6 @@
+C:\Git\GvSync\idsw-gvlib\obj\Debug\idsw-gvlib.csproj.AssemblyReference.cache
+C:\Git\GvSync\idsw-gvlib\obj\Debug\idsw-gvlib.csproj.CoreCompileInputs.cache
+C:\Git\GvSync\idsw-gvlib\bin\Debug\idsw-gvlib.dll
+C:\Git\GvSync\idsw-gvlib\bin\Debug\idsw-gvlib.pdb
+C:\Git\GvSync\idsw-gvlib\obj\Debug\idsw-gvlib.dll
+C:\Git\GvSync\idsw-gvlib\obj\Debug\idsw-gvlib.pdb
