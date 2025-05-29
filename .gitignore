@@ -1,6 +1,7 @@
 dist/
 build/
 nvapi/
+idsw-gvlib/nvapi 
 .vs
 .vscode
 .TEST
