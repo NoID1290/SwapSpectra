@@ -22,7 +22,8 @@ sys.path.append(os.path.dirname(dll_path))
 # Load the assembly
 try:
     clr.AddReference("idsw-gvlib")
-    from NvngxUpdaterLib import NvngxUpdater  # type: ignore
+    from NvngxUpdaterLib import NvngxUpdater # type: ignore
+    from ClearNVGX import ClearNvngx  # type: ignore
 except Exception as e:
     logger.error(f"Failed to load idsw-gvlib assembly: {e}")
     raise
@@ -55,19 +56,20 @@ def update_nvngx(dll_path: str) -> bool:
         logger.error(f"Error updating NVNGX DLL: {e}")
         return False
 
-def main():
-    """Main entry point with error handling"""
-    try:
-        dll_path = input("Enter the path to the DLSS DLL (e.g., C:\\path\\to\\nvngx.dll): ").strip()
-        if update_nvngx(dll_path):
-            print("Update completed successfully")
-        else:
-            print("Update failed, check the logs for details")
-    except KeyboardInterrupt:
-        print("\nOperation cancelled by user")
-    except Exception as e:
-        print(f"Unexpected error: {e}")
-        logger.exception("Unexpected error occurred")
+class NvngxSwap:
+    """Encapsulates the NVNGX DLL update process."""
 
-if __name__ == "__main__":
-    main()
+    @staticmethod
+    def run():
+        """Entry point for running the update process with user interaction."""
+        try:
+            dll_path = input("Enter the path to the DLSS DLL (e.g., C:\\path\\to\\nvngx.dll): ").strip()
+            if update_nvngx(dll_path):
+                print("Update completed successfully")
+            else:
+                print("Update failed, check the logs for details")
+        except KeyboardInterrupt:
+            print("\nOperation cancelled by user")
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            logger.exception("Unexpected error occurred")
