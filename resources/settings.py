@@ -1,7 +1,7 @@
 class Settings:
     APP_TITLE = "SwapSpectra"
     APP_VERSION = "v0.3.1"
-    BUILD_VERSION = "250528"
+    BUILD_VERSION = "250601"
     MAIN_TITLE = "SwapSpectra"
     EXECUTABLE_PATH = "gsyncwrapper-1.1.0-x86_64.dll"
     LOG_FILE = "gsyncwrapper.log"
