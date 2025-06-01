@@ -4,6 +4,7 @@ from core.registry import read_status, update_status_in_registry, read_dlss_over
 from core.logger import setup_logging
 from core.ckGpu import GPUname
 from core.nvgxswap import update_nvngx
+from core.nvapi_init import initialize_nvapi
 from resources.settings import Settings, format_text
 from program.themes import Themes
 from program.settings_window import SettingsWindow
@@ -24,6 +25,7 @@ class GSyncToggleApp(QtWidgets.QWidget):
         setup_logging()
         self.init_ui()
         self.checkNV()
+        self.init_nvapi()
         self.checkGvLib()
         self.detect_current_status()
         self.detect_dlss_overlay_status()
@@ -192,7 +194,17 @@ class GSyncToggleApp(QtWidgets.QWidget):
         except ImportError as e:
             self.logInfo(f"Error loading GvLib: {e}")
             return False
-
+    
+    def init_nvapi(self):
+        """Initialize the NVAPI wrapper library."""
+        try:
+            if initialize_nvapi():
+                self.logInfo("NVAPI initialized successfully.")
+            else:
+                self.logInfo("NVAPI initialization failed.")
+        except Exception as e:
+            self.logInfo(f"Error initializing NVAPI: {e}")
+            raise ImportError(f"Failed to initialize NVAPI: {e}")
 
     def detect_current_status(self):  # Detect the current G-SYNC status
         try:

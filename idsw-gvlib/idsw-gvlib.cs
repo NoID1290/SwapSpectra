@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Linq;
 using System.Text.RegularExpressions;
-
+using System.Text;
 
 namespace NvngxUpdaterLib
 {
@@ -218,6 +218,149 @@ namespace ReturnPresence
 }
 
 // This code provides a class ReturnPresence that can be used to return a presence message indicating that the NVIDIA NGX Updater is running.
+
+namespace NvApiCall
+{
+    [ComVisible(true)]
+    [Guid("87654321-4321-4321-4321-210987654321")] // Generate a new GUID
+    public class NvapiWrapper
+    {
+        private const string NVAPI_DLL = "nvapi64.dll";
+        private static IntPtr nvApiModule;
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr LoadLibrary(string dllPath);
+
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate NvAPI_Status NvAPI_InitializeDelegate();
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate NvAPI_Status NvAPI_UnloadDelegate();
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate NvAPI_Status NvAPI_GetInterfaceVersionStringDelegate(StringBuilder version);
+
+        private static NvAPI_InitializeDelegate nvAPI_Initialize;
+        private static NvAPI_UnloadDelegate nvAPI_Unload;
+        private static NvAPI_GetInterfaceVersionStringDelegate nvAPI_GetInterfaceVersionString;
+
+        private static readonly string[] POTENTIAL_PATHS = new[]
+        {
+            @"C:\Windows\System32\nvapi64.dll",
+            @"C:\Windows\SysWOW64\nvapi64.dll",
+            @"C:\Windows\System32\nvapi.dll"
+        };
+
+        public enum NvAPI_Status
+        {
+            OK = 0,
+            ERROR = -1,
+            LIBRARY_NOT_FOUND = -2,
+            NO_IMPLEMENTATION = -3,
+            API_NOT_INITIALIZED = -4,
+            INVALID_ARGUMENT = -5,
+            NVIDIA_DEVICE_NOT_FOUND = -6,
+            END_ENUMERATION = -7,
+            INVALID_HANDLE = -8,
+            INCOMPATIBLE_STRUCT_VERSION = -9
+        }
+
+        private static T GetDelegateForFunction<T>(string functionName) where T : Delegate
+        {
+            IntPtr procAddress = GetProcAddress(nvApiModule, functionName);
+            if (procAddress == IntPtr.Zero)
+                throw new EntryPointNotFoundException($"Function {functionName} not found in NVAPI");
+
+            return Marshal.GetDelegateForFunctionPointer<T>(procAddress);
+        }
+
+        private static void LoadNvApiFunctions()
+        {
+            nvAPI_Initialize = GetDelegateForFunction<NvAPI_InitializeDelegate>("NvAPI_Initialize");
+            nvAPI_Unload = GetDelegateForFunction<NvAPI_UnloadDelegate>("NvAPI_Unload");
+            nvAPI_GetInterfaceVersionString = GetDelegateForFunction<NvAPI_GetInterfaceVersionStringDelegate>("NvAPI_GetInterfaceVersionString");
+        }
+
+        private static string GetNvapiPath()
+        {
+            foreach (var path in POTENTIAL_PATHS)
+            {
+                if (File.Exists(path))
+                    return path;
+            }
+            throw new FileNotFoundException("NVAPI DLL could not be found in expected locations.");
+        }
+
+        public static bool Initialize()
+        {
+            try
+            {
+                if (nvApiModule != IntPtr.Zero)
+                    return true; // Already initialized
+
+                string nvapiPath = GetNvapiPath();
+                nvApiModule = LoadLibrary(nvapiPath);
+                
+                if (nvApiModule == IntPtr.Zero)
+                    throw new DllNotFoundException($"Failed to load NVAPI from {nvapiPath}");
+
+                LoadNvApiFunctions();
+                
+                var status = nvAPI_Initialize();
+                if (status != NvAPI_Status.OK)
+                    throw new InvalidOperationException($"NVAPI initialization failed with status: {status}");
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"NVAPI initialization error: {ex.Message}");
+                return false;
+            }
+        }
+
+        public static void Unload()
+        {
+            try
+            {
+                if (nvApiModule != IntPtr.Zero)
+                {
+                    nvAPI_Unload();
+                    nvApiModule = IntPtr.Zero;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"NVAPI unload error: {ex.Message}");
+            }
+        }
+
+        public static string GetVersion()
+        {
+            try
+            {
+                if (!Initialize())
+                    return null;
+
+                var sb = new StringBuilder(64);
+                var status = nvAPI_GetInterfaceVersionString(sb);
+                
+                if (status != NvAPI_Status.OK)
+                    throw new InvalidOperationException($"Failed to get NVAPI version. Status: {status}");
+
+                return sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting NVAPI version: {ex.Message}");
+                return null;
+            }
+        }
+    }
+}
 
 
 
