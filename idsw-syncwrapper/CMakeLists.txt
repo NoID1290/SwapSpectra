@@ -3,8 +3,8 @@
 #----------------------------------------------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.27)
-project(idswsyncwrapper 
-        VERSION 1.1.0
+project(idsw-gswrapper 
+        VERSION 0.1.0
         DESCRIPTION "Command line app for Windows to toggle GSync."
         HOMEPAGE_URL ""
         LANGUAGES C CXX)
