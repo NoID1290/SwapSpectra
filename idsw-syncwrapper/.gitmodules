@@ -1,3 +1,0 @@
-[submodule "externals/nvapi-wrapper"]
-	path = externals/nvapi-wrapper
-	url = https://github.com/FrogTheFrog/nvapi-wrapper
