@@ -25,7 +25,7 @@ class GSyncToggleApp(QtWidgets.QWidget):
         setup_logging()
         self.init_ui()
         self.checkNV()
-        self.init_nvapi()
+        '''self.init_nvapi()'''  # Under construction, not needed for now
         self.checkGvLib()
         self.detect_current_status()
         self.detect_dlss_overlay_status()
@@ -44,7 +44,7 @@ class GSyncToggleApp(QtWidgets.QWidget):
         self.add_title_bar(main_layout)
         self.add_status_label(main_layout)
         self.add_dlss_overlay_label(main_layout)
-        self.add_dlssSwap_label(main_layout)
+        '''self.add_dlssSwap_label(main_layout)'''  # DLSS Swap label is not needed for now, can be added later
         self.add_buttons(main_layout)
         self.add_log_viewer(main_layout)
         self.add_footer(main_layout)
@@ -195,7 +195,7 @@ class GSyncToggleApp(QtWidgets.QWidget):
             self.logInfo(f"Error loading GvLib: {e}")
             return False
     
-    def init_nvapi(self):
+    def init_nvapi(self):  # Under construction
         """Initialize the NVAPI wrapper library."""
         try:
             if initialize_nvapi():
