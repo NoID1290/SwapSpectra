@@ -1,6 +1,6 @@
 # SwapSpectra
 
-SwapSpectra is a simple tool for managing NVIDIA G-SYNC and DLSS Overlay settings.
+SwapSpectra is a simple tool for managing NVIDIA G-SYNC, Override DLSS to all games supported from version 3.
 
 ---
 
