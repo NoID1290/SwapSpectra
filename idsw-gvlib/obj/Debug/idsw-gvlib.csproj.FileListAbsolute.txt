@@ -1,0 +1,3 @@
+C:\Users\90lec\source\repos\NoID1290\SwapSpectra\idsw-gvlib\obj\Debug\idsw-gvlib.csproj.AssemblyReference.cache
+C:\Users\90lec\source\repos\NoID1290\SwapSpectra\idsw-gvlib\obj\Debug\idsw-gvlib.csproj.CoreCompileInputs.cache
+C:\Users\90lec\source\repos\NoID1290\SwapSpectra\idsw-gvlib\obj\Debug\idsw-gvlib.dll

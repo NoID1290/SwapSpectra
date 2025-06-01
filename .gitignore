@@ -1,22 +1,9 @@
 dist/
 build/
-nvapi/
 .vs
 .vscode
 .TEST
 _todo/
 __pycache__
 
-gsyncwrapper.log
-/version_info.txt
-/main.spec
-/idsw-gvlib/idsw-gvlib.csproj
-/idsw-gvlib/Properties/AssemblyInfo.cs
-/idsw-gvlib/obj/Debug/.NETFramework,Version=v4.7.2.AssemblyAttributes.cs
-/idsw-gvlib/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
-/idsw-gvlib/obj/Debug/idsw-gvlib.csproj.AssemblyReference.cache
-/idsw-gvlib/obj/Debug/idsw-gvlib.csproj.CoreCompileInputs.cache
-/idsw-gvlib/obj/Debug/idsw-gvlib.csproj.FileListAbsolute.txt
-/idsw-gvlib/obj/Debug/idsw-gvlib.pdb
-/idsw-gvlib/obj/Release/.NETFramework,Version=v4.7.2.AssemblyAttributes.cs
-/idsw-gvlib/obj/Release/idsw-gvlib.csproj.AssemblyReference.cache
+
