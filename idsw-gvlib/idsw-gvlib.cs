@@ -234,5 +234,81 @@ namespace ReturnPresence
 
 // This code provides a class ReturnPresence that can be used to return a presence message indicating that the NVIDIA NGX Updater is running.
 
+namespace GpuInfo
+{
+    [ComVisible(true)]
+    [Guid("A1B2C3D4-E5F6-7890-1234-56789ABCDEF2")] 
+    public class NvidiaGpuInfo
+    {
+        [StructLayout(LayoutKind.Sequential)]
+        private struct NvPhysicalGpuHandle { public IntPtr ptr; }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct NvDisplayHandle { public IntPtr ptr; }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct NvGpuUtilizationDomains
+        {
+            public uint Version;
+            public uint Gpu;
+            public uint FrameBuffer;
+            public uint VideoEngine;
+            public uint BusInterface;
+        }
+
+        [DllImport("nvapi64.dll")]
+        private static extern int NvAPI_Initialize();
+
+        [DllImport("nvapi64.dll")]
+        private static extern int NvAPI_EnumPhysicalGPUs([Out] NvPhysicalGpuHandle[] gpuHandles, out int gpuCount);
+
+        [DllImport("nvapi64.dll")]
+        private static extern int NvAPI_GPU_GetUsages(NvPhysicalGpuHandle gpuHandle, ref NvGpuUtilizationDomains gpuUsages);
+
+        [DllImport("nvapi64.dll")]
+        private static extern int NvAPI_GPU_GetMemoryInfo(NvPhysicalGpuHandle gpuHandle, out ulong totalMemory, out ulong freeMemory);
+
+        private const int NVAPI_OK = 0;
+
+        public static string GetGpuInfo()
+        {
+            try
+            {
+                if (NvAPI_Initialize() != NVAPI_OK)
+                    return "Failed to initialize NVAPI";
+
+                var gpuHandles = new NvPhysicalGpuHandle[64];
+                int gpuCount;
+                
+                if (NvAPI_EnumPhysicalGPUs(gpuHandles, out gpuCount) != NVAPI_OK)
+                    return "Failed to enumerate GPUs";
+
+                var info = new System.Text.StringBuilder();
+                
+                for (int i = 0; i < gpuCount; i++)
+                {
+                    var utilization = new NvGpuUtilizationDomains { Version = 1 };
+                    ulong totalMemory, freeMemory;
+
+                    if (NvAPI_GPU_GetUsages(gpuHandles[i], ref utilization) == NVAPI_OK &&
+                        NvAPI_GPU_GetMemoryInfo(gpuHandles[i], out totalMemory, out freeMemory) == NVAPI_OK)
+                    {
+                        info.AppendLine($"GPU {i + 1}:");
+                        info.AppendLine($"GPU Utilization: {utilization.Gpu}%");
+                        info.AppendLine($"Memory Used: {(totalMemory - freeMemory) / 1024 / 1024}MB / {totalMemory / 1024 / 1024}MB");
+                        info.AppendLine($"Memory Utilization: {utilization.FrameBuffer}%");
+                        info.AppendLine();
+                    }
+                }
+
+                return info.ToString();
+            }
+            catch (Exception ex)
+            {
+                return $"Error retrieving GPU info: {ex.Message}";
+            }
+        }
+    }
+}
 
 
