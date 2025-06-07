@@ -43,6 +43,26 @@ def update_dlss_overlay_in_registry(option):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+# Read NVNGX status from the registry
+def read_nvngx_status() -> str:
+    """
+    Reads the NVNGX status from the Windows registry.
+    
+    Returns:
+        str: The status of NVNGX, either "ON" or "OFF".
+    """
+    try:
+        key = reg.OpenKey(reg.HKEY_CURRENT_USER, Settings.REGISTRY_PATH, 0, reg.KEY_READ)
+        status = reg.QueryValueEx(key, "NvngxStatus")[0]
+        reg.CloseKey(key)
+        return status
+    except FileNotFoundError:
+        return "OFF"
+    except Exception as e:
+        print(f"An error occurred while reading NVNGX status: {e}")
+        return "OFF"
+
+
 
 
 
