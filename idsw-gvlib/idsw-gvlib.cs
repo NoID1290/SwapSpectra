@@ -361,6 +361,58 @@ namespace NvApiCall
         }
     }
 }
+// This code provides a class NvapiWrapper that wraps NVAPI calls for initialization, unloading, and getting the version of the NVAPI library.
+
+
+namespace WinGammaRamp
+{
+    [ComVisible(true)]
+    [Guid("11223344-5566-7788-99AA-BBCCDDEEFF00")] // Generate a new GUID
+    public class WindowsContrastBrightness
+    {
+        [DllImport("user32.dll")]
+        private static extern bool SetDeviceGammaRamp(IntPtr hdc, ref GammaRamp lpGammaRamp);
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetDC(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        private static extern bool ReleaseDC(IntPtr hWnd, IntPtr hdc);
+        public struct GammaRamp
+        {
+            public ushort[] Red;
+            public ushort[] Green;
+            public ushort[] Blue;
+            public GammaRamp(int size)
+            {
+                Red = new ushort[size];
+                Green = new ushort[size];
+                Blue = new ushort[size];
+            }
+        }
+        public static void SetContrastBrightness(float contrast, float brightness)
+        {
+            var ramp = new GammaRamp(256);
+            for (int i = 0; i < 256; i++)
+            {
+                var value = (ushort)(Math.Clamp((i - 128) * contrast + 128 + brightness, 0, 255) * 65535 / 255);
+                ramp.Red[i] = value;
+                ramp.Green[i] = value;
+                ramp.Blue[i] = value;
+            }
+            IntPtr hdc = GetDC(IntPtr.Zero);
+            if (hdc != IntPtr.Zero)
+            {
+                SetDeviceGammaRamp(hdc, ref ramp);
+                ReleaseDC(IntPtr.Zero, hdc);
+            }
+        }
+    }
+}
+// This code provides a class WindowsContrastBrightness that allows setting the contrast and brightness for the display using P/Invoke to call Windows API functions.
+// It uses a gamma ramp to adjust the pixel values based on the specified contrast and brightness levels.
+// The gamma ramp is applied to the display device context obtained from the Windows API, allowing for real-time adjustments to the display settings.
+
+
+
 
 
 

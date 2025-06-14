@@ -4,6 +4,7 @@ import os
 import logging
 from typing import Optional
 from resources.settings import Settings
+from core.registry import read_nvngx_status
 
 # Configure logging
 logging.basicConfig(
@@ -62,6 +63,15 @@ class NvngxSwap:
     @staticmethod
     def run():
         """Entry point for running the update process with user interaction."""
+        logger.info("Starting NVNGX DLL update process")
+        current_status = read_nvngx_status()
+        logger.info(f"Current NVNGX status: {current_status}")
+        if current_status == "ON":
+            logger.info("NVNGX is currently enabled, proceeding with update")
+        else:
+            logger.info("NVNGX is currently disabled, enabling it for update")
+
+
         try:
             dll_path = input("Enter the path to the DLSS DLL (e.g., C:\\path\\to\\nvngx.dll): ").strip()
             if update_nvngx(dll_path):
